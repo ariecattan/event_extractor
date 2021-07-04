@@ -15,26 +15,12 @@ from corpus import Corpus
 
 
 
-def create_corpus(config, tokenizer, split_name, is_training=True):
-    docs_path = os.path.join(config.data_folder, split_name + '.json')
-    mentions_path = os.path.join(config.data_folder,
-                                 split_name + '_{}.json'.format(config.mention_type))
+def create_corpus(config, tokenizer):
+    docs_path = os.path.join(config.data_path)
     with open(docs_path, 'r') as f:
         documents = json.load(f)
 
-    mentions = []
-    if is_training or config.use_gold_mentions:
-        with open(mentions_path, 'r') as f:
-            mentions = json.load(f)
-
-    predicted_topics = None
-    if not is_training and config.use_predicted_topics:
-        with open(config.predicted_topics_path, 'rb') as f:
-            predicted_topics = pickle.load(f)
-
-    logging.info('Split - {}'.format(split_name))
-
-    return Corpus(documents, tokenizer, config.segment_window, mentions, subtopic=config.subtopic, predicted_topics=predicted_topics)
+    return Corpus(documents, tokenizer, config.segment_window, mentions=[])
 
 
 

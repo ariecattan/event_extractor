@@ -5,7 +5,7 @@ import torch
 
 
 class Corpus:
-    def __init__(self, documents, tokenizer, segment_window, mentions, subtopic=True, predicted_topics=None):
+    def __init__(self, documents, tokenizer, segment_window, mentions, subtopic=False, predicted_topics=None):
         self.documents = documents
         self.mentions = mentions
         self.segment_window = segment_window
@@ -17,17 +17,10 @@ class Corpus:
         self.topics_bert_tokens = []
         self.topics_start_end_bert = []
 
-
         if len(self.mentions):
             self.labels = self.create_dict_labels()
 
-
-        if predicted_topics:
-            self.docs_by_topic = self.separate_doc_into_predicted_subtopics(predicted_topics)
-        elif self.wd:
-            self.docs_by_topic = {doc_id: [doc_id] for doc_id in self.documents.keys()}
-        else:
-            self.docs_by_topic = self.separate_docs_into_topics(subtopic)
+        self.docs_by_topic = self.separate_docs_into_topics(subtopic)
 
         self.tokenize(tokenizer)
 

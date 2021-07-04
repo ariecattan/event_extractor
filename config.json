@@ -1,0 +1,19 @@
+{
+  "gpu_num" : [0],
+
+  "bert_model": "roberta-large",
+  "hidden_layer": 1024,
+  "dropout": 0.3,
+  "with_mention_width": true,
+  "with_head_attention": true,
+  "embedding_dimension": 20,
+
+  "max_mention_span": 10,
+  "training_method": "continue",
+  "segment_window": 512,
+  "exact": true,
+
+  "data_path": "data/topics.json",
+  "save_path": "data/output.json",
+  "model_path" : "checkpoints"
+}
