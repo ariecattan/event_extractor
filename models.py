@@ -87,29 +87,3 @@ class SpanScorer(nn.Module):
     def forward(self, span_embedding):
         return self.mlp(span_embedding)
 
-
-
-
-class SimplePairWiseClassifier(nn.Module):
-    def __init__(self, config):
-        super(SimplePairWiseClassifier, self).__init__()
-        self.input_layer = config.bert_hidden_size * 3 if config.with_head_attention else config.bert_hidden_size * 2
-        if config.with_mention_width:
-            self.input_layer += config.embedding_dimension
-        self.input_layer *= 3
-        self.hidden_layer = config.hidden_layer
-        self.pairwise_mlp = nn.Sequential(
-            nn.Dropout(config.dropout),
-            nn.Linear(self.input_layer, self.hidden_layer),
-            nn.ReLU(),
-            nn.Linear(self.hidden_layer, self.hidden_layer),
-            nn.Dropout(config.dropout),
-            nn.ReLU(),
-            nn.Linear(self.hidden_layer, 1),
-        )
-        self.pairwise_mlp.apply(init_weights)
-
-    def forward(self, first, second):
-        return self.pairwise_mlp(torch.cat((first, second, first * second), dim=1))
-
-
